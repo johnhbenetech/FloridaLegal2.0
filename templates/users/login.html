@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{%  load static %}
+
+
+{% block header_stuff %}
+     <style>
+        body{
+        background: url('{% static "img/login_background.jpg" %}') no-repeat center center fixed;
+        background-size: cover;
+        }
+    </style>
+{% endblock header_stuff %}
+
+{% block content %}
+    <div class="container">
+        <div class="row" style="padding-top:30px;">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="panel panel-primary panel-login">
+                    <div class="panel-body">
+                        <img src="{% static 'img/logo_black.png' %}" class="img-responsive">
+                        <hr>
+                        <form method="post" action=""> {% csrf_token %}
+                            <div class="form-group">
+                                <input type="text" class="form-control"
+                                name="{{ form.username.html_name }}"
+                                placeholder="Username">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control"
+                                    name="{{ form.password.html_name }}"
+                                    placeholder="Password">
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-block">
+                                    Sign In
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+

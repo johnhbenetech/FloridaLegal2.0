@@ -1,0 +1,73 @@
+{% extends 'editing_base.html' %}
+{% load static %}
+
+{% block page_title %}Organization{% endblock page_title %}
+
+{% block header_stuff %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css">
+{% endblock header_stuff %}
+
+
+{% block content %}
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <h3>Related Programs Editing</h3>
+    <button type="button" class="btn btn-success" id="add_more">Add more</button>
+    {{ formset.management_form }}
+    <div id="programs_empty_form" style="display:none">
+        <div class='no_error visible formset-form-container'>
+            {{ formset.empty_form }}
+            <div class="form-group">
+                <a class="btn btn-danger btn-delete">Delete</a>
+            </div>
+        </div>
+    </div>
+    <div id="programs_formset_container">
+        {% for formset_form in formset.forms %}
+            <div class='no_error visible formset-form-container'>
+                {{ formset_form }}
+                <div class="form-group">
+                    <a class="btn btn-danger btn-delete">Delete</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block js_stuff %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function(){
+
+
+            $('textarea, input, select').not('[type="checkbox"]').addClass("form-control");
+            $('textarea').attr("rows", 3);
+            $('#programs_formset_container select').select2();
+
+
+            $(document).on('click', '.btn-delete', function() {
+                $(this).closest('.formset-form-container').find($('input[name*="DELETE"]')).prop("checked", true);
+                $(this).closest('.formset-form-container').css("display", "none").removeClass('visible');
+                $(this).remove();
+            });
+
+            $('input[name*="DELETE"]').css("display", "none");
+            $('input[name*="DELETE"]').prev().css("display", "none");
+
+
+            $('#add_more').on('click', function() {
+                console.log('clicked1');
+                var form_idx = $('#id_programs_prefix-TOTAL_FORMS').val();
+                new_form = $('#programs_empty_form').html().replace(/__prefix__/g, form_idx);
+                $('#programs_formset_container').prepend(new_form);
+                 console.log($('#id_programs_prefix-'+form_idx+'-taxonomy_ids'));
+                $('select').select2();
+                console.log($('#programs_empty_form'));
+                $('#id_programs_prefix-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+            });
+        })
+    </script>
+{% endblock js_stuff %}

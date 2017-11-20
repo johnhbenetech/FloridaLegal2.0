@@ -1,0 +1,48 @@
+.panel-login{
+    margin-top: 50px;
+    background-color: #F2F2F2;
+    border: none;
+    /*padding-top: 30px;*/
+    padding: 0 20px 20px 20px;
+    border-radius: 5px;
+}
+
+.panel-login hr{
+    border-top: 1px solid #E7E7E7;
+}
+
+.content-wrapper{
+    padding-top: 20px;
+    padding-bottom: 50px;
+}
+
+.navbar-brand img{
+    width: 200px;
+    margin: -10px;
+}
+
+.btn-delete{
+    margin-top: 10px;
+}
+
+.select2-selection.select2-selection--multiple{
+    width: 100%!important;
+}
+
+.row-update-accepted{
+    background-color: #9ACD32;
+}
+
+.row-update-rejected{
+    background-color: #CD5C5C;
+}
+
+.tr-form-divider{
+    height: 50px;
+}
+
+table th {
+    text-align: center;
+    font-weight: 700;
+}
+

@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page_title %}Organization{% endblock page_title %}
+
+{% block header_stuff %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css">
+{% endblock header_stuff %}
+
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-lg-offset-4">
+                <form class="form-horizontal" method="get" name="select_organization">
+                    <div class="form-group">
+                        <label>Select organization to update</label><br>
+                        <select class="form-control" name="organization" required>
+                            <option>Choose organizaion to edit</option>
+                            {% for available_organization in available_organizations %}
+                                <option value="{{ available_organization.id }}"
+                                    {% if available_organization.id == organization.id %}selected{% endif %}>
+                                    {{ available_organization.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group text-center">
+                        <button class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8">
+                <form method="post">{% csrf_token %}
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">Save</button>
+                    </div>
+                     <!-- Nav tabs -->
+                      <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" {% if page == "organization" %}class="active"{% endif %}>
+                            <a href="{% url 'organization' organization_id %}">
+                                Organization
+                            </a>
+                        </li>
+                        <li role="presentation" {% if page == "programs" %}class="active"{% endif %}>
+                            <a href="{% url 'editing' organization_id 'programs'  %}">
+                                Related Programs
+                            </a>
+                        </li>
+                        <li role="presentation" {% if page == "services" %}class="active"{% endif %}>
+                            <a href="{% url 'editing' organization_id 'services' %}">
+                                Related Services
+                            </a>
+                        </li>
+                      </ul>
+
+                      <!-- Tab panes -->
+                      <div class="tab-content">
+                        <h3>Related Services Editing</h3>
+
+                        {% if validation_mode == "validation_mode" %}
+                            {% if not objects_update %}
+                                aa{{ objects_update }}bb
+                                Everything was processed and all changes were applied
+                            {% else %}
+
+                                {{ formset.management_form }}
+
+                                <div class="form-group">
+                                    <label>Verification status</label><br>
+                                    <select class="form-control" name="verification_status" required>
+                                        {% for status in statuses %}
+                                            <option value="{{ status.0 }}"
+                                                    {% if change_log.update_status == status.0  %}selected{% endif %}>{{ status.0 }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div id="object_empty_form" style="display:none">
+                                    <div class='no_error visible formset-form-container'>
+                                        {{ formset.empty_form }}
+                                        <div class="form-group">
+                                            <a class="btn btn-danger btn-delete">Delete</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="object_formset_container">
+                                    {{ initial_data }}
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <td>Field name</td>
+                                                <td width="30%">Initial</td>
+                                                <td>Edited</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                             {% for formset_form in formset.forms %}
+                                                {% for field in formset_form %}
+                                                    <tr {% if field.name == "id" or field.name == "DELETE" or field.name == "service"  %} class="hidden"{% endif %}>
+                                                        <td>
+                                                            {{ field.name }}
+                                                        </td>
+                                                        <td>
+                                                            {% for id, data in initial_data.items %}
+                                                                {% if id == formset_form.service.value %}
+                                                                    {% for key, value in data.items %}
+                                                                        {% if key == field.name %}
+                                                                            {% if value %}
+                                                                                {{ value }}
+                                                                            {% endif %}
+                                                                            {% if value and field.value and value != field.value %}
+                                                                                <div class="label label-primary">Edited!</div>
+                                                                            {% endif %}
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </td>
+                                                        <td>
+                                                            <p>
+                                                                {{ field }}
+                                                            </p>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                                 <tr>
+                                                    <td>Ended</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                 </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% endif %}
+
+                        {% else %}
+                            <button type="button" class="btn btn-success" id="add_more_service">Add more</button>
+                            {{ formset.management_form }}
+                            <div id="object_empty_form" style="display:none">
+                                <div class='no_error visible formset-form-container'>
+                                    {{ formset.empty_form }}
+                                    <div class="form-group">
+                                        <a class="btn btn-danger btn-delete">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="object_formset_container">
+                                {% for formset_form in formset.forms %}
+                                    {{ formset_form.error }}
+                                    <div class='no_error visible formset-form-container'>
+                                        {{ formset_form }}
+                                        <div class="form-group">
+                                            <a class="btn btn-danger btn-delete">Delete</a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                      </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js_stuff %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function(){
+
+            $('textarea, input, select').not('[type="checkbox"]').addClass("form-control");
+            $('textarea').attr("rows", 3);
+            $('#object_formset_container select').select2();
+
+            $(document).on('click', '.btn-delete', function() {
+                $(this).closest('.formset-form-container').find($('input[name*="DELETE"]')).prop("checked", true);
+                $(this).closest('.formset-form-container').css("display", "none").removeClass('visible');
+                $(this).remove();
+            });
+
+            $('input[name*="DELETE"]').css("display", "none");
+            $('input[name*="DELETE"]').prev().css("display", "none");
+
+            $('#add_more_service').on('click', function() {
+                console.log('clicked1');
+                var form_idx = $('#id_object_prefix-TOTAL_FORMS').val();
+                new_form = $('#object_empty_form').html().replace(/__prefix__/g, form_idx);
+                $('#object_formset_container').prepend(new_form);
+                $('select').select2();
+                $('#id_object_prefix-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+            });
+        })
+    </script>
+{% endblock js_stuff %}

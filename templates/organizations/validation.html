@@ -1,0 +1,30 @@
+{% extends 'editing_base.html' %}
+{% load static %}
+
+{% block page_title %}Organization{% endblock page_title %}
+
+{% block header_stuff %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css">
+{% endblock header_stuff %}
+
+
+{% block content %}
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <h3>Validation</h3>
+      <form>{% csrf_token %}
+          {{ form.as_p }}
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+  </div>
+
+{% endblock %}
+
+{% block js_stuff %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
+
+{% endblock js_stuff %}

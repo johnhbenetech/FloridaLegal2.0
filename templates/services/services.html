@@ -1,0 +1,150 @@
+{% extends 'editing_base.html' %}
+{% load static %}
+
+{% block page_title %}Organization{% endblock page_title %}
+
+{% block header_stuff %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css">
+{% endblock header_stuff %}
+
+
+{% block content %}
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <h3>Related Services Editing</h3>
+
+    {% if validation_mode %}
+        {% if not services_update  %}
+            Everything was processed and all changes were applied
+        {% else %}
+            {{ formset.management_form }}
+
+            <div class="form-group">
+                <label>Verification status</label><br>
+                <select class="form-control" name="verification_status" required>
+                    {% for status in statuses %}
+                        <option value="{{ status.0 }}"
+                                {% if change_log.update_status == status.0  %}selected{% endif %}>{{ status.0 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div id="services_empty_form" style="display:none">
+                <div class='no_error visible formset-form-container'>
+                    {{ formset.empty_form }}
+                    <div class="form-group">
+                        <a class="btn btn-danger btn-delete">Delete</a>
+                    </div>
+                </div>
+            </div>
+            <div id="services_formset_container">
+                <table>
+                    <thead>
+                        <tr>
+                            <td>Field name</td>
+                            <td width="30%">Initial</td>
+                            <td>Edited</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                         {% for formset_form in formset.forms %}
+                            {% for field in formset_form %}
+                                <tr {% if field.name == "id" or field.name == "DELETE" or field.name == "service"  %} class="hidden"{% endif %}>
+                                    <td>
+                                        {{ field.name }}
+                                    </td>
+                                    <td>
+                                        {% for id, data in initial_data.items %}
+                                            {% if id == formset_form.service.value %}
+                                                {% for key, value in data.items %}
+                                                    {% if key == field.name %}
+                                                        {{ value }}
+                                                        {% if value != field.value %}
+                                                            <div class="label label-primary">Edited!</div>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        <p>
+                                            {{ field }}
+                                        </p>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+
+    {% else %}
+        <button type="button" class="btn btn-success" id="add_more_service">Add more</button>
+        {{ formset.management_form }}
+        <div id="services_empty_form" style="display:none">
+            <div class='no_error visible formset-form-container'>
+                {{ formset.empty_form }}
+                <div class="form-group">
+                    <a class="btn btn-danger btn-delete">Delete</a>
+                </div>
+            </div>
+        </div>
+        <div id="services_formset_container">
+            {% for formset_form in formset.forms %}
+                <div class='no_error visible formset-form-container'>
+                    {{ formset_form }}
+                    <div class="form-group">
+                        <a class="btn btn-danger btn-delete">Delete</a>
+                    </div>
+                </div>
+
+            {% endfor %}
+        </div>
+    {% endif %}
+
+  </div>
+{% endblock %}
+
+{% block js_stuff %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function(){
+
+
+            $('textarea, input, select').not('[type="checkbox"]').addClass("form-control");
+            $('textarea').attr("rows", 3);
+            $('#services_formset_container select').select2();
+
+
+            $(document).on('click', '.btn-delete', function() {
+                $(this).closest('.formset-form-container').find($('input[name*="DELETE"]')).prop("checked", true);
+                $(this).closest('.formset-form-container').css("display", "none").removeClass('visible');
+                $(this).remove();
+            });
+
+            $('input[name*="DELETE"]').css("display", "none");
+            $('input[name*="DELETE"]').prev().css("display", "none");
+
+
+            $('#add_more_service').on('click', function() {
+                console.log('clicked1');
+                var form_idx = $('#id_services_prefix-TOTAL_FORMS').val();
+                new_form = $('#services_empty_form').html().replace(/__prefix__/g, form_idx);
+
+
+                $('#services_formset_container').prepend(new_form);
+                 console.log($('#id_services_prefix-'+form_idx+'-taxonomy_ids'));
+
+                $('select').select2();
+
+
+                console.log($('#services_empty_form'));
+                $('#id_services_prefix-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+            });
+        })
+    </script>
+{% endblock js_stuff %}

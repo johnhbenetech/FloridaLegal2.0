@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block page_title %}{% endblock page_title %}</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+    {% block header_stuff %}
+    {% endblock header_stuff %}
+</head>
+<body>
+    {% include 'navbar.html' %}
+{#    {% include 'error_notifications.html' %}#}
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-lg-offset-4">
+                    <form class="form-horizontal" method="get" name="select_organization" action="{% url 'home' %}">
+                        <div class="form-group">
+                            <label>Select organization to update</label><br>
+                            <select class="form-control" name="organization" required>
+                                <option>Choose organizaion to edit</option>
+                                {% for available_organization in available_organizations %}
+                                    <option value="{{ available_organization.id }}"
+                                        {% if available_organization.id == organization.id %}selected{% endif %}>
+                                        {{ available_organization.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group text-center">
+                            <button class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8">
+                    <form method="post">{% csrf_token %}
+
+                        <div class="form-group">
+                            <button class="btn btn-primary" type="submit">Save</button>
+                            {% if previous_url %}
+                                {% if previous_url %}<a href="{{ previous_url }}" class="btn btn-default">Back</a>{% endif %}
+                            {% endif %}
+                        </div>
+
+                         <!-- Nav tabs -->
+                          <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" {% if page == "organization" %}class="active"{% endif %}>
+                                <a href="{% url 'organization' organization_id %}{% if validation_mode %}validation_mode/{% endif %}">
+                                    Organization
+                                </a>
+                            </li>
+                            <li role="presentation" {% if page == "programs" %}class="active"{% endif %}>
+                                <a href="{% url 'editing' organization_id 'programs' %}{% if validation_mode %}validation_mode/{% endif %}">
+                                    Related Programs
+                                </a>
+                            </li>
+                            <li role="presentation" {% if page == "locations" %}class="active"{% endif %}>
+                                <a href="{% url 'editing' organization_id 'locations' %}{% if validation_mode %}validation_mode/{% endif %}">
+                                    Related Locations
+                                </a>
+                            </li>
+                            {% if validation_mode %}
+                                <li role="presentation" {% if page == "validation" %}class="active"{% endif %}>
+                                    <a href="{% url 'validation' organization_id %}">
+                                        Validation
+                                    </a>
+                                </li>
+                            {% endif %}
+                          </ul>
+                          {% block content %}
+                          {% endblock content %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script src="{% static 'js/scripts.js' %}"></script>
+
+    <script>
+        $(document).ready(function(){
+
+            $('textarea, input, select').not('[type="checkbox"]').addClass("form-control");
+            $('textarea').attr("rows", 3);
+            $('#services_formset_container select').select2();
+
+        })
+    </script>
+
+    {% block js_stuff %}
+    {% endblock js_stuff %}
+</body>
+</html>

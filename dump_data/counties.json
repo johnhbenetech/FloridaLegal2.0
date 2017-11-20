@@ -1,0 +1,471 @@
+[
+  {
+    "model": "geo_and_languages.county",
+    "pk": 1,
+    "fields": {
+      "name": "Alachua"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 2,
+    "fields": {
+      "name": "Baker"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 3,
+    "fields": {
+      "name": "Bay"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 4,
+    "fields": {
+      "name": "Bradford"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 5,
+    "fields": {
+      "name": "Brevard"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 6,
+    "fields": {
+      "name": "Broward"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 7,
+    "fields": {
+      "name": "Calhoun"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 8,
+    "fields": {
+      "name": "Charlotte"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 9,
+    "fields": {
+      "name": "Citrus"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 10,
+    "fields": {
+      "name": "Clay"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 11,
+    "fields": {
+      "name": "Collier"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 12,
+    "fields": {
+      "name": "Columbia"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 13,
+    "fields": {
+      "name": "DeSoto"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 14,
+    "fields": {
+      "name": "Dixie"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 15,
+    "fields": {
+      "name": "Duval"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 16,
+    "fields": {
+      "name": "Escambia"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 17,
+    "fields": {
+      "name": "Flagler"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 18,
+    "fields": {
+      "name": "Franklin"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 19,
+    "fields": {
+      "name": "Gadsden"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 20,
+    "fields": {
+      "name": "Gilchrist"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 21,
+    "fields": {
+      "name": "Glades"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 22,
+    "fields": {
+      "name": "Gulf"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 23,
+    "fields": {
+      "name": "Hamilton"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 24,
+    "fields": {
+      "name": "Hardee"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 25,
+    "fields": {
+      "name": "Hendry"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 26,
+    "fields": {
+      "name": "Hernando"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 27,
+    "fields": {
+      "name": "Highlands"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 28,
+    "fields": {
+      "name": "Hillsborough"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 29,
+    "fields": {
+      "name": "Holmes"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 30,
+    "fields": {
+      "name": "Indian River"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 31,
+    "fields": {
+      "name": "Jackson"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 33,
+    "fields": {
+      "name": "Jefferson"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 34,
+    "fields": {
+      "name": "Lafayette"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 35,
+    "fields": {
+      "name": "Lake"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 36,
+    "fields": {
+      "name": "Lee"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 37,
+    "fields": {
+      "name": "Leon"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 38,
+    "fields": {
+      "name": "Levy"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 39,
+    "fields": {
+      "name": "Liberty"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 40,
+    "fields": {
+      "name": "Madison"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 41,
+    "fields": {
+      "name": "Manatee"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 42,
+    "fields": {
+      "name": "Marion"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 43,
+    "fields": {
+      "name": "Martin"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 44,
+    "fields": {
+      "name": "Miami-Dade"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 45,
+    "fields": {
+      "name": "Monroe"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 46,
+    "fields": {
+      "name": "Nassau"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 47,
+    "fields": {
+      "name": "Okaloosa"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 48,
+    "fields": {
+      "name": "Okeechobee"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 49,
+    "fields": {
+      "name": "Orange"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 50,
+    "fields": {
+      "name": "Osceola"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 51,
+    "fields": {
+      "name": "Palm Beach"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 52,
+    "fields": {
+      "name": "Pasco"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 53,
+    "fields": {
+      "name": "Pinellas"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 54,
+    "fields": {
+      "name": "Polk"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 55,
+    "fields": {
+      "name": "Putnam"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 56,
+    "fields": {
+      "name": "Santa Rosa"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 57,
+    "fields": {
+      "name": "Sarasota"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 58,
+    "fields": {
+      "name": "Seminole"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 59,
+    "fields": {
+      "name": "St. Johns"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 60,
+    "fields": {
+      "name": "St. Lucie"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 61,
+    "fields": {
+      "name": "Sumter"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 62,
+    "fields": {
+      "name": "Suwannee"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 63,
+    "fields": {
+      "name": "Taylor"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 64,
+    "fields": {
+      "name": "Union"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 65,
+    "fields": {
+      "name": "Volusia"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 66,
+    "fields": {
+      "name": "Wakulla"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 67,
+    "fields": {
+      "name": "Walton"
+    }
+  },
+  {
+    "model": "geo_and_languages.county",
+    "pk": 68,
+    "fields": {
+      "name": "Washington"
+    }
+  }
+]

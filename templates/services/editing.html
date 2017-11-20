@@ -1,0 +1,213 @@
+{% extends 'editing_base.html' %}
+{% load static %}
+{% load custom_templatetags %}
+
+{% block page_title %}Organization{% endblock page_title %}
+
+{% block header_stuff %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css">
+{% endblock header_stuff %}
+
+
+{% block content %}
+
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <h3>Related {{ page|capfirst }} Editing</h3>
+
+    {% if validation_mode %}
+        {% if not pending_updates %}
+            Everything was processed and all changes were applied
+        {% else %}
+
+            {{ formset.management_form }}
+
+            <div id="object_empty_form" style="display:none">
+                <div class='no_error visible formset-form-container'>
+                    {{ formset.empty_form }}
+                    <div class="form-group">
+                        <a class="btn btn-danger btn-delete">Delete</a>
+                    </div>
+                </div>
+            </div>
+            <div id="object_formset_container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="15%">Field name</th>
+                            <th width="20%">Initial value</th>
+                            <th>Edited value</th>
+                            <th width="25%">Related objects</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                         {% for formset_form in formset.forms %}
+                            {% for field in formset_form %}
+                                <tr {% if field.name == "id" or field.name == "DELETE" or field.name == "service" or field.name == "program" or field.name == "program_update" %} class="hidden"{% endif %}>
+                                    <td>
+                                        <p>
+                                            {{ field.name }}
+                                        </p>
+                                    </td>
+                                    <td>
+                                        {% if not formset_form|get_linked_field_value:linked_field %}
+                                            <div class="label label-success">New!</div>
+                                        {% else %}
+                                            {% for id, data in initial_data.items %}
+                                                {% if id == formset_form|get_linked_field_value:linked_field %}
+                                                    {% for key, value in data.items %}
+                                                        {% if key == field.name %}
+                                                            {% if value.id %}
+                                                                {{ value.text }}
+                                                                {% if value.id != field.value %}
+                                                                    <div class="label label-primary">Edited!</div>
+                                                                {% endif %}
+                                                            {% else %}
+                                                                {{ value }}
+                                                                {% if  value != field.value %}
+                                                                    <div class="label label-primary">Edited!</div>
+                                                                {% endif %}
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <p>
+                                            {{ field }}
+                                        </p>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            {% endfor %}
+                             <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    {% if related_objects %}
+                                       {% for id, data in related_objects.items %}
+                                            {% if id == formset_form.id.value %}
+                                                <div class="text-right">
+                                                    <a href="{% url 'editing_related_objects' organization_id related_objects_name currently_edited_model formset_form.id.value %}{% if validation_mode %}validation_mode/{% endif %}" class="btn btn-success btn-xs">Edit</a>
+                                                </div>
+                                                <ul>
+                                                    {% for item in data %}
+                                                        <li>{% if item.name %}{{ item.name }}{% else %}{{ related_objects_name }}: id {{ item.id }}{% endif %}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                       {% endfor %}
+                                    {% endif %}
+                                </td>
+                             </tr>
+                             <tr class="tr-form-divider">
+                             </tr>
+                        {% endfor %}
+                        {% for data in deleted_objects_list %}
+                            {% for field, val in data.items %}
+                                <tr>
+                                    <td>
+                                        <p>
+                                            {{ field }}
+                                        </p>
+                                    </td>
+                                    <td>
+                                        {{ val }}
+                                    </td>
+                                    <td>
+                                        <div class="label label-danger">Deleted!</div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+
+    {% else %}
+        <button type="button" class="btn btn-success" id="add_more_button">Add more</button>
+        {{ formset.management_form }}
+        <div id="object_empty_form" style="display:none">
+            <div class='no_error visible formset-form-container'>
+                {{ formset.empty_form }}
+                <div class="form-group">
+                    <a class="btn btn-danger btn-delete">Delete</a>
+                </div>
+            </div>
+        </div>
+        <div id="object_formset_container">
+            {% for formset_form in formset.forms %}
+                <div class="row">
+                    <div class="col-lg-6">
+                      <div class='no_error visible formset-form-container'>
+                            {{ formset_form }}
+                            <div class="form-group">
+                                <a class="btn btn-danger btn-delete">Delete</a>
+                            </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                        {% if formset_form.id.value in related_objects_ids %}
+                           {% for id, data in related_objects.items %}
+                                {% if id == formset_form.id.value %}
+                                    <p class="lead">Related {{ related_objects_name|capfirst }}:
+                                        <a href="{% url 'editing_related_objects' organization_id related_objects_name currently_edited_model formset_form.id.value %}{% if validation_mode %}validation_mode/{% endif %}" class="btn btn-success btn-xs">Edit</a>
+                                    </p>
+                                    <ul>
+                                        {% for item in data %}
+                                            <li>{% if item.name %}{{ item.name }}{% else %}{{ related_objects_name }}: id {{ item.id }}{% endif %}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                           {% endfor %}
+                        {% elif related_objects_name %}
+                            <p class="lead">Related {{ related_objects_name|capfirst }}:
+                                <a href="{% url 'editing_related_objects' organization_id related_objects_name currently_edited_model formset_form.id.value %}{% if validation_mode %}validation_mode/{% endif %}" class="btn btn-success btn-xs">Add</a>
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+  </div>
+
+{% endblock %}
+
+{% block js_stuff %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function(){
+
+            $('textarea, input, select').not('[type="checkbox"]').addClass("form-control");
+            $('textarea').attr("rows", 3);
+            $('#object_formset_container select').select2();
+
+            $(document).on('click', '.btn-delete', function() {
+                $(this).closest('.formset-form-container').find($('input[name*="DELETE"]')).prop("checked", true);
+                $(this).closest('.formset-form-container').css("display", "none").removeClass('visible');
+                $(this).remove();
+            });
+
+            $('input[name*="DELETE"]').css("display", "none");
+            $('input[name*="DELETE"]').prev().css("display", "none");
+
+            $('#add_more_button').on('click', function() {
+                console.log('clicked1');
+                var form_idx = $('#id_object_prefix-TOTAL_FORMS').val();
+                new_form = $('#object_empty_form').html().replace(/__prefix__/g, form_idx);
+                $('#object_formset_container').prepend(new_form);
+                $('#object_formset_container').find('select').select2();
+                $('#id_object_prefix-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+            });
+        })
+    </script>
+{% endblock js_stuff %}

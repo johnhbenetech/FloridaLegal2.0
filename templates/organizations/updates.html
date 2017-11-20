@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page_title %}Checking{% endblock page_title %}
+
+{% block header_stuff %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css">
+{% endblock header_stuff %}
+
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 col-lg-offset-1">
+                <table class="table table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Update Status</th>
+                            <th>Name</th>
+                            <th>Created</th>
+                            <th>Validation Note</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for update in updates %}
+                            <tr class="
+                                    {% if update.update_status == "Accepted" %}
+                                        row-update-accepted
+                                    {% elif update.update_status == "Rejected" %}
+                                        row-update-rejected
+                                    {% endif %}
+                                    "
+                                >
+                                <td>
+                                    {% if request.user.is_superuser %}
+                                        {% if update.update_status == "Unprocessed" %}
+                                            <a href="{% url 'organization_validation' update.organization.id 'validation_mode' %}">
+                                                {{ update.update_status }}
+                                            </a>
+                                        {% else %}
+                                            {{ update.update_status }}
+                                        {% endif %}
+                                    {% else %}
+                                        {{ update.update_status }}
+                                    {% endif %}
+
+                                </td>
+                                <td>
+                                    {{ update.organization.name }}
+                                </td>
+                                <td>
+                                    {{ update.created|date:"m/d/Y h:m A" }}
+                                </td>
+                                <td>
+                                    {{ update.validation_note|default_if_none:"" }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js_stuff %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            $('select').select2();
+        })
+    </script>
+{% endblock js_stuff %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page_title %}Organization{% endblock page_title %}
+
+{% block header_stuff %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css">
+{% endblock header_stuff %}
+
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-lg-offset-4">
+                <form class="form-horizontal" method="get" name="select_organization">
+                    <div class="form-group">
+                        <label>Select organization to update</label><br>
+                        <select class="form-control" name="organization" required>
+                            <option>Choose organizaion to edit</option>
+                            {% for available_organization in available_organizations %}
+                                <option value="{{ available_organization.id }}">{{ available_organization.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group text-center">
+                        <button class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js_stuff %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            $('select').select2();
+        })
+    </script>
+{% endblock js_stuff %}
