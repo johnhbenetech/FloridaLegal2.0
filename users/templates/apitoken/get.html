@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+{% block content %}
+<h3>API Token Generated.</h3>
+<p>
+    Your Current API Token: {{ token.key }}
+</p>
+<br/>
+
+
+<h3>Get Existing Records</h3>
+<div>
+    <h4>Get Services List</h4>
+    <code>
+        curl -X GET {% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/v1/services/ -H 'Authorization: Token {{ token.key }}' -H 'Accept:
+        application/json; indent=4'
+    </code>
+</div>
+
+<div>
+    <h4>Get Service With ID = 1</h4>
+    <code>
+        curl -X GET {% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/v1/services/1/ -H 'Authorization: Token {{ token.key }}' -H 'Accept:
+        application/json; indent=4'
+    </code>
+</div>
+
+
+<div>
+    <h4>Get Organizations List</h4>
+    <code>
+        curl -X GET {% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/v1/organizations/ -H 'Authorization: Token {{ token.key }}' -H 'Accept:
+        application/json; indent=4'
+    </code>
+</div>
+
+<div>
+    <h4>Get Organization With ID = 1</h4>
+    <code>
+        curl -X GET {% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/v1/organizations/1/ -H 'Authorization: Token {{ token.key }}' -H 'Accept:
+        application/json; indent=4'
+    </code>
+</div>
+
+<div>
+    <h4>Get Services by Organization ID</h4>
+    <code>
+        curl -X GET {% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/v1/services/?organizationid=1 -H 'Authorization: Token {{ token.key }}' -H 'Accept:
+        application/json; indent=4'
+    </code>
+</div>
+
+<br/>
+<br/>
+
+<div>
+    <h3>Create Service Update (must provide token of record owner)</h3>
+    <code>
+            <pre>
+curl -X POST {% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/v1/service_updates/ -H 'Authorization: Token {{ token.key }}' -H 'Accept: application/json; indent=4' -d ' 
+ {
+    "service": 1,
+    "name": "Test Service",
+    "alternate_name": "",
+    "description": "",
+    "url": "",
+    "email": "",
+    "status": "",
+    "interpretation_services": [
+        1
+    ],
+    "application_process": "",
+    "wait_time": "",
+    "fees": "",
+    "accredidations": "",
+    "licenses": "",
+    "taxonomy_ids": [],
+    "validation_note": "TESTING 123",
+    "eligibilities_updates": [
+        {
+            "eligibility_record": 1,
+            "eligibility_details": "wqe"
+        }
+    ],
+    "payments_updates": [
+        {
+            "payment_record": 1,
+            "payment": "qwe"
+        }
+    ],
+    "documents_updates": [
+        {
+            "required_document_record": 1,
+            "document": "qwe"
+        }
+    ],
+    "serviceareas_updates": [
+        {
+            "area_record": 1,
+            "area": [
+                1
+            ],
+            "description": "qwe"
+        }
+    ],
+    "regular_schedule_updates": [
+        {
+            "regular_schedule_record": 1,
+            "weekday": 2,
+            "from_hour": "21:40:00",
+            "to_hour": "21:30:00",
+            "closed": false
+        }
+    ],
+    "holiday_schedule_updates": [
+        {
+            "holiday_schedule_record": 1,
+            "day": "2017-09-20",
+            "from_hour": null,
+            "to_hour": null,
+            "closed": true
+        }
+    ],
+    "locations_updates": [
+        {
+            "location_record": 1,
+            "name": "qwe",
+            "alternate_name": "qqweqw",
+            "description": "qweqw",
+            "transportation": "",
+            "latitude": "",
+            "longitude": "",
+            "contact_updates": [
+                {
+                    "contact_record": 1,
+                    "name": "qwe",
+                    "title": "",
+                    "department": "",
+                    "email": "",
+                    "phone_updates": [
+                        {
+                            "phone_record": 1,
+                            "number": "(222)222-2222",
+                            "extension": "",
+                            "type": "",
+                            "department": "",
+                            "languages": [],
+                            "description": ""
+                        }
+                    ]
+                }
+            ],
+            "physical_address_updates": [
+                {
+                    "physical_address_record": 1,
+                    "attention": "qwe",
+                    "address_1": "",
+                    "address_2": "",
+                    "address_3": "",
+                    "address_4": "",
+                    "city": "1111",
+                    "region": "",
+                    "state_province": null,
+                    "postal_code": "",
+                    "country": ""
+                }
+            ]
+        }
+    ]
+}' -H 'Content-Type: application/json'
+            </pre>
+    </code>
+</div>
+{% endblock %}

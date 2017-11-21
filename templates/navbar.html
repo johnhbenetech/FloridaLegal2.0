@@ -1,4 +1,7 @@
 {% load static %}
+{% load widget_tweaks %}
+
+
 <nav class="navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -25,14 +28,14 @@
                 {% if request.user.is_superuser %}
                     <li><a href="{% url 'updates' %}">All Updates</a></li>
                 {% endif %}
-    {#            <li><a href="{% url 'token:get' %}">API Token</a></li>#}
+                <li><a href="{% url 'user:get' %}">API Token</a></li>}
             {% endif %}
         </ul>
         <ul class="nav navbar-nav navbar-right">
             {% if user.is_authenticated %}
-                <li><a href="{% url 'logout' %}?next=/"><span class="glyphicon glyphicon-log-out"></span>  Logout</a></li>
+                <li><a href="{% url 'user:logout' %}?next=/"><span class="glyphicon glyphicon-log-out"></span>  Logout</a></li>
             {% else %}
-                <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span>  Login</a></li>
+                <li><a href="{% url 'user:login' %}"><span class="glyphicon glyphicon-log-in"></span>  Login</a></li>
             {% endif %}
         </ul>
     </div>

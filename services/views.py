@@ -238,7 +238,7 @@ class EditingView(View):
                                 values_m2m = dict()
                                 for field_name, val in new_object_update.items():
                                     if val:
-                                        if type(val).__name__ == "QuerySet":
+                                        if type(val).__name__ == "QuerySet" or type(val).__name__ == "list":
                                             values_m2m[field_name] = val
                                         else:
                                             new_object_update_dictionary_for_creation[field_name] = val

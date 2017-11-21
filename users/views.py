@@ -4,7 +4,23 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.contrib import messages
+from django.views import generic
+from django.contrib.auth.mixins import LoginRequiredMixin
+from rest_framework.authtoken.models import Token
 
+
+
+class TokenGetView(LoginRequiredMixin, generic.TemplateView):
+    template_name = 'apitoken/get.html'
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        token = Token.objects.get_or_create(user=self.request.user)[0]
+        context['token'] = token
+        return self.render_to_response(context)
+        
+        
+        
 
 def login_view(request):
     form = LoginForm(request.POST or None)
@@ -32,4 +48,4 @@ def logout_view(request):
     user = request.user
     if not user.is_anonymous():
         logout(request)
-    return HttpResponseRedirect(reverse("login"))
+    return HttpResponseRedirect(reverse("user:login"))

@@ -23,13 +23,14 @@ class OrganizationViewSet(viewsets.ModelViewSet):
             print(instance_id)
             obj = OrganizationUpdate.objects.filter(organization__owner=user, organization_id=instance_id, is_processed=False).last()
             if obj:
-                qs = OrganizationUpdate.objects.filter(owner=user)
+                qs = OrganizationUpdate.objects.filter(organization__owner=user)
                 self.is_update_model = True
                 self.kwargs["pk"] = obj.id
             else:
                 qs = Organization.objects.filter(owner=user)
         else:
             qs = Organization.objects.filter(owner=user)
+        qs = Organization.objects.filter(owner=user)
         return qs
 
     def get_serializer(self, args, **kwargs):

@@ -16,7 +16,7 @@
                     <div class="form-group">
                         <label>Select organization to update</label><br>
                         <select class="form-control" name="organization" required>
-                            <option>Choose organizaion to edit</option>
+                            <option>Choose organization to edit</option>
                             {% for available_organization in available_organizations %}
                                 <option value="{{ available_organization.id }}">{{ available_organization.name }}</option>
                             {% endfor %}

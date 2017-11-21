@@ -1,6 +1,9 @@
-django==1.11.7
+Django==1.11.7
 django-crequest==2016.3.16
-djangorestframework==3.7.1
 django-easy-select2==1.3.4
-django-select2-forms
-psycopg2
+django-select2-forms==2.0.2
+django-sortedm2m==1.5.0
+django-widget-tweaks==1.4.1
+djangorestframework==3.7.1
+psycopg2==2.7.3.2
+pytz==2017.3

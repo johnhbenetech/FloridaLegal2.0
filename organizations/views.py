@@ -140,8 +140,9 @@ def validation(request, organization_id):
                                 if val:
                                     if model_update_class._meta.get_field(field_name).get_internal_type() == "ForeignKey":
                                         field_name = "%s_id" % field_name
-
-                                    if type(val).__name__ == "QuerySet":
+                                    print(field_name)
+                                    print(type(val).__name__)        
+                                    if type(val).__name__ == "QuerySet" or type(val).__name__ == "list":
                                         values_m2m[field_name] = val
                                     else:
                                         object_update_dictionary_for_creation[field_name] = val
