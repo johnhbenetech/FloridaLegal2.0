@@ -67,21 +67,11 @@
                                 </li>
                             {% endif %}
                           </ul>
-                          
-                        <div class="form-group">
+
                           {% block content %}
  
                           {% endblock content %}
-                          
-                                                    
-                          
-                            <button class="btn btn-primary" type="submit">Save</button>
-                            {% if previous_url %}
-                                {% if previous_url %}<a href="{{ previous_url }}" class="btn btn-default">Back</a>{% endif %}
-                            {% endif %}
-                        </div>                          
-                          
-                          
+              
                     </form>
                 </div>
             </div>
