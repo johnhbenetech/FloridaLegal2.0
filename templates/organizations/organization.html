@@ -38,15 +38,25 @@
                                     </td>
                                     <td>
                                         {% for key, value in initial_data.items %}
+                                        
                                             {% if key == field.name %}
                                                 {% if value %}
 
-                                                        {{ value }}
+
                                                         {% if value != field.value %}
                                                             <div class="label label-primary">Edited!</div>
                                                         {% endif %}
+                                                        <p>{{ value }}</p>
+                                                
+                                                
+                                                {% elif field.value %}
+
+                                                    <div class="label label-primary">Edited!</div>
 
                                                 {% endif %}
+                                                
+                                                
+                                                
                                             {% endif %}
                                         {% endfor %}
                                     </td>

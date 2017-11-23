@@ -93,7 +93,7 @@ WSGI_APPLICATION = 'legal_app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'openref2',
+        'NAME': 'openref',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         'HOST': '127.0.0.1',

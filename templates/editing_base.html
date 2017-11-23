@@ -21,7 +21,7 @@
                         <div class="form-group">
                             <label>Select organization to update</label><br>
                             <select class="form-control" name="organization" required>
-                                <option>Choose organizaion to edit</option>
+                                <option>Choose organization to edit</option>
                                 {% for available_organization in available_organizations %}
                                     <option value="{{ available_organization.id }}"
                                         {% if available_organization.id == organization.id %}selected{% endif %}>
@@ -54,14 +54,14 @@
                                     Organization
                                 </a>
                             </li>
-                            <li role="presentation" {% if page == "programs" %}class="active"{% endif %}>
-                                <a href="{% url 'editing' organization_id 'programs' %}{% if validation_mode %}validation_mode/{% endif %}">
-                                    Related Programs
-                                </a>
-                            </li>
                             <li role="presentation" {% if page == "locations" %}class="active"{% endif %}>
                                 <a href="{% url 'editing' organization_id 'locations' %}{% if validation_mode %}validation_mode/{% endif %}">
                                     Related Locations
+                                </a>
+                            </li>
+                            <li role="presentation" {% if page == "programs" %}class="active"{% endif %}>
+                                <a href="{% url 'editing' organization_id 'programs' %}{% if validation_mode %}validation_mode/{% endif %}">
+                                    Related Programs
                                 </a>
                             </li>
                             {% if validation_mode %}
