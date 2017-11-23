@@ -33,7 +33,6 @@ def organization(request, organization_id=None, validation_mode=None):
 
     page = "organization"
 
-    print(request.session.get("pages", "no"))
     if not "pages" in request.session:
         request.session["pages"] = [request.META.get('HTTP_REFERER')]
     else:
