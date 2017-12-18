@@ -15,11 +15,27 @@ class EligibilityUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = EligibilityUpdate
         fields = '__all__'
+        
+        
+        
+class ApplicationProcessSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+    class Meta:
+        model = ApplicationProcess
+        fields = '__all__'
 
+
+class ApplicationProcessUpdateSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+    class Meta:
+        model = ApplicationProcessUpdate
+        fields = '__all__'
+        
 
 class ServiceSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
     eligibility = EligibilitySerializer(source='eligibility_set', many=True)
+    applicationprocess = ApplicationProcessSerializer(source='applicationprocess_set', many=True)
     class Meta:
         model = Service
         fields = '__all__'
@@ -28,6 +44,7 @@ class ServiceSerializer(serializers.ModelSerializer):
 class ServiceUpdateSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
     eligibility_update = EligibilityUpdateSerializer(source='eligibilityupdate_set', many=True)
+    applicationprocess_update = ApplicationProcessUpdateSerializer(source='applicationprocessupdate_set', many=True)
     class Meta:
         model = ServiceUpdate
         fields = '__all__'
@@ -113,8 +130,8 @@ class UpdatingLogic(object):
     def populate_remaining_update_instances(self):
         organization = self.organization
         self.locations = Location.objects
-        self.related_models = {"Program": ["Service"], "Service": ["Eligibility"]}
-        self.mapping = {"Location": "organization", "Program": "organization", "Service": "program", "Eligibility": "service"}
+        self.related_models = {"Program": ["Service"], "Service": ["Eligibility"],"Service": ["ApplicationProcess"]}
+        self.mapping = {"Location": "organization", "Program": "organization", "Service": "program", "Eligibility": "service",  "ApplicationProcess": "service"}
         self.mapping_data = {"organization": organization}
         models = ["Location", "Program"]
         for model in models:
@@ -214,7 +231,7 @@ class UpdatingLogic(object):
             if instance_name in ["program_set", "location_set"]:
                 obj_fields["organization"] = self.organization
 
-            if instance_name in ["service_set", "serviceupdate_set", "eligibility_set", "eligibilityupdate_set"]:
+            if instance_name in ["service_set", "serviceupdate_set", "eligibility_set", "eligibilityupdate_set", "applicationprocess_set", "applicationprocessupdate_set"]:
                 parent_instance_field = "%s_id" % parent_instance_name
                 obj_fields[parent_instance_field] = parent_instance_id
 

@@ -29,11 +29,9 @@ class ProgramForm(forms.ModelForm):
 
 
 class ProgramUpdateForm(forms.ModelForm):
-
     class Meta:
         model = Service
         exclude = ["organization", "created_by", "created", "modified", "is_edited", "is_marked_deleted", "is_processed"]
-
         widgets = {'program': forms.HiddenInput()}
 
 
@@ -49,3 +47,20 @@ class EligibilityUpdateForm(forms.ModelForm):
     class Meta:
         model = EligibilityUpdate
         exclude = ["eligibility", "service", "service_update", "is_marked_deleted", "is_processed"]
+        
+        
+        
+        
+        
+class ApplicationProcessForm(forms.ModelForm):
+
+    class Meta:
+        model = ApplicationProcess
+        exclude = ["service", "service_update",]
+
+
+class ApplicationProcessUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = ApplicationProcessUpdate
+        exclude = ["applicationprocess", "service", "service_update", "is_marked_deleted", "is_processed"]        

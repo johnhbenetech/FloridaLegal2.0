@@ -24,7 +24,6 @@ class EditingView(View):
         """
         self.organization_id = organization_id
         self.page_name = page_name
-
         user = request.user
         self.page = page_name
 
@@ -34,7 +33,6 @@ class EditingView(View):
                 return HttpResponseRedirect(reverse("home"))
         else:
             self.validation_mode = False
-
 
         if user.is_superuser:
             self.organization = get_object_or_404(Organization, id=organization_id)
@@ -166,7 +164,6 @@ class EditingView(View):
 
     def get(self, request, organization_id, page_name, validation_mode=None, parent_model=None, parent_obj_id=None):
         self.prepare(request, organization_id, page_name, validation_mode, parent_model, parent_obj_id)
-
         #variables assignment for "back" button
         self.organization_id = organization_id
         self.parent_obj_id = parent_obj_id
@@ -298,7 +295,6 @@ class EditingView(View):
             "initial_data": self.initial_data if self.validation_mode == True else None,
             "previous_url": self.previous_url,
             "linked_field": self.linked_field,
-            "related_objects_ids": self.related_objects_ids
         })
 
     def getting_pending_update(self):
@@ -309,53 +305,57 @@ class EditingView(View):
 
 
     def getting_related_objects(self):
-        related_objects_mapping = {"Program": "Service",
-                                   "Service": "Eligibility"
+        related_objects_mapping = {"Program": ["Service"],
+                                   "Service": ["Eligibility", "ApplicationProcess"]
                                    }
 
-        self.related_objects_ids = list()
         if self.model_initial_class_name in related_objects_mapping:
-            related_model_initial_name = related_objects_mapping[self.model_initial_class_name]
-            related_model_initial_set_name = "%s_set" % related_model_initial_name.lower()
+            related_objects_dict  = dict()
+            for related_model_initial_name in related_objects_mapping[self.model_initial_class_name]:
+                related_model_initial_set_name = "%s_set" % related_model_initial_name.lower()
 
-            related_model_update_name = "%sUpdate" % related_objects_mapping[self.model_initial_class_name]
-            related_model_update_set_name = "%s_set" % related_model_update_name.lower()
+                related_model_update_name = "%sUpdate" % related_model_initial_name
+                related_model_update_set_name = "%s_set" % related_model_update_name.lower()
 
-            #for template
-            self.related_objects_name = "%ss" % (related_model_initial_name.lower())
+                #for template
+                self.related_objects_name = "%ss" % (related_model_initial_name.lower())
 
-            #for url in template
-            if self.is_update_objects:
-                self.currently_edited_model_name = "%s_update" % self.model_initial_class_name.lower()
-            else:
-                self.currently_edited_model_name = "%s" % self.model_initial_class_name.lower()
+                #for url in template
+                if self.is_update_objects:
+                    self.currently_edited_model_name = "%s_update" % self.model_initial_class_name.lower()
+                else:
+                    self.currently_edited_model_name = "%s" % self.model_initial_class_name.lower()
 
 
-            base_objects_to_iterate = self.objects_update if self.is_update_objects else self.objects_initial
-            related_objects = dict()
-            for obj in base_objects_to_iterate:
+                base_objects_to_iterate = self.objects_update if self.is_update_objects else self.objects_initial
+                related_objects = dict()
+                objects_ids = list()
+                for obj in base_objects_to_iterate:
 
-                if getattr(obj, related_model_update_set_name).all().exists():
+                    if getattr(obj, related_model_update_set_name).all().exists():
+                        objects_ids.append(obj.id)
+                        for item in getattr(obj, related_model_update_set_name).all():
+                            print("ITEM")
+                            print(model_to_dict(item))
+                            if not obj.id in related_objects:
+                                related_objects[obj.id] = [model_to_dict(item)]
+# Dont show deleted instances in sidebar                              
+#                            elif item.is_marked_deleted is False:
+                            else:
+                               related_objects[obj.id].append(model_to_dict(item))
+                    elif getattr(obj, related_model_initial_set_name).all().exists():
+                        objects_ids.append(obj.id)
+                        for item in getattr(obj, related_model_initial_set_name).all():
+                            if not obj.id in related_objects:
+                                related_objects[obj.id] = [model_to_dict(item)]
+                            else:
+                                related_objects[obj.id].append(model_to_dict(item))
 
-                    #this is needed for check on templates to show Related objects add button, when there are now related objects
-                    self.related_objects_ids.append(obj.id)
-
-                    for item in getattr(obj, related_model_update_set_name).all():
-                        if not obj.id in related_objects:
-                            related_objects[obj.id] = [model_to_dict(item)]
-                        else:
-                            related_objects[obj.id].append(model_to_dict(item))
-                elif getattr(obj, related_model_initial_set_name).all().exists():
-
-                    #this is needed for check on templates to show Related objects add button, when there are now related objects
-                    self.related_objects_ids.append(obj.id)
-
-                    for item in getattr(obj, related_model_initial_set_name).all():
-                        if not obj.id in related_objects:
-                            related_objects[obj.id] = [model_to_dict(item)]
-                        else:
-                            related_objects[obj.id].append(model_to_dict(item))
-            self.related_objects = related_objects
+                related_objects_dict[related_model_initial_name] = {"plural_name": "%ss".lower() % related_model_initial_name,
+                                                                    "data": related_objects,
+                                                                    "objects_ids": objects_ids
+                                                                    }
+            self.related_objects = related_objects_dict
         else:
             self.related_objects = None
             self.related_objects_name = None
@@ -375,7 +375,7 @@ class EditingView(View):
             else:
                 self.previous_url = reverse("editing", kwargs=kwargs)
 
-        if self.model_initial_class_name == "Eligibility":
+        if self.model_initial_class_name in ["Eligibility", "ApplicationProcess"]:
             content_type = ContentType.objects.get(model=self.parent_model.replace("_","").lower())
             parent_model_class = content_type.model_class()
             parent_model_obj = parent_model_class.objects.get(id=self.parent_obj_id)

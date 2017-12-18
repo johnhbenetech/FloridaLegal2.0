@@ -16,8 +16,6 @@ class Program(models.Model, CreationUpdatedInstances):
     created_by = models.ForeignKey(User, blank=True, null=True, default=None)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    status = models.CharField(max_length=255,blank=True)
-    description = models.TextField(blank=True)
 
     exclude_fields_for_update = ["created_by", "created", "modified"]
 
@@ -42,8 +40,6 @@ class ProgramUpdate(models.Model):
     modified = models.DateTimeField(auto_now=True)
     is_processed = models.BooleanField(default=False)
     is_marked_deleted = models.BooleanField(default=False)
-    status = models.CharField(max_length=255,blank=True)
-    description = models.TextField(blank=True)
 
     def __str__(self):
         return "%s" % self.id
@@ -163,25 +159,6 @@ def serviceupdate_post_save(sender, instance, created, **kwargs):
             for eligibility in eligibilities:
                 eligibility.service = instance.service
                 eligibility.save(force_update=True)
-                
-        if instance.service.applicationprocess_set.all().exists():
-            applicationprocesses = instance.service.applicationprocess_set.all()
-            for applicationprocess in applicationprocesses:
-                applicationprocess.service = instance.service
-                applicationprocess.service_update = instance
-                applicationprocess.save(force_update=True)
-
-        if instance.service.applicationprocessupdate_set.filter(is_marked_deleted=False, is_processed=False, service_update__isnull=True).exists():
-            applicationprocesses = instance.service.applicationprocessupdate_set.filter(is_marked_deleted=False, is_processed=False, service_update__isnull=True)
-            for applicationprocess in applicationprocesses:
-                applicationprocess.service_update = instance
-                applicationprocess.save(force_update=True)
-
-        if instance.applicationprocessupdate_set.filter(is_marked_deleted=False, is_processed=False, service__isnull=True).exists():
-            applicationprocesses = instance.applicationprocessupdate_set.filter(is_marked_deleted=False, is_processed=False, service__isnull=True)
-            for applicationprocess in applicationprocesses:
-                applicationprocess.service = instance.service
-                applicationprocess.save(force_update=True)        
 
 post_save.connect(serviceupdate_post_save, sender=ServiceUpdate)
 
@@ -200,8 +177,6 @@ class Eligibility(models.Model, CreationUpdatedInstances):
     area = models.ManyToManyField(County, blank=True)
     area_description = models.TextField(blank=True)
     required_document = models.TextField(blank=True)
-    immigration_status = models.TextField(blank=True)
-    criminal_status = models.TextField(blank=True)
 
     exclude_fields_for_update = []
 
@@ -223,35 +198,7 @@ class EligibilityUpdate(models.Model):
     required_document = models.TextField(blank=True)
     is_processed = models.BooleanField(default=False)
     is_marked_deleted = models.BooleanField(default=False)
-    immigration_status = models.TextField(blank=True)
-    criminal_status = models.TextField(blank=True)
-    
-    
-class ApplicationProcess(models.Model, CreationUpdatedInstances):
-    service = models.ForeignKey(Service, blank=True, null=True, default=None)
-    service_update = models.ForeignKey(ServiceUpdate, blank=True, null=True, default=None)
 
-    howto = models.TextField(blank=True)
-    intakehours = models.TextField(blank=True)
-    waittime = models.TextField(blank=True)
-
-
-    exclude_fields_for_update = []
-
-
-class ApplicationProcessUpdate(models.Model):
-    applicationprocess = models.ForeignKey(ApplicationProcess, blank=True, null=True, default=None)
-    service = models.ForeignKey(Service, blank=True, null=True, default=None)
-    service_update = models.ForeignKey(ServiceUpdate, blank=True, null=True, default=None)
-
-    howto = models.TextField(blank=True)
-    intakehours = models.TextField(blank=True)
-    waittime = models.TextField(blank=True)
-    
-    is_processed = models.BooleanField(default=False)
-    is_marked_deleted = models.BooleanField(default=False)
-    
-    
 
 class Taxonomy(models.Model):
     name = models.CharField(max_length=255)

@@ -15,7 +15,7 @@
                 <form class="form-horizontal" method="get" name="select_organization">
                     <div class="form-group">
                         <label>Select organization to update</label><br>
-                        <select class="form-control" name="organization" required>
+                        <select id="organization" class="form-control" name="organization" required>
                             <option>Choose organization to edit</option>
                             {% for available_organization in available_organizations %}
                                 <option value="{{ available_organization.id }}">{{ available_organization.name }}</option>
@@ -23,7 +23,7 @@
                         </select>
                     </div>
                     <div class="form-group text-center">
-                        <button class="btn btn-primary">Submit</button>
+                        <button id="orgsubmit" class="btn btn-primary">Submit</button>
                     </div>
                 </form>
             </div>
@@ -38,6 +38,22 @@
     <script>
         $(document).ready(function(){
             $('select').select2();
+            
+            
+            //This is hacky, Disable button until an organization is selected. Using hard coded unselected text
+            
+            $('#orgsubmit').attr('disabled', true);
+            
+            $(document).on('change','#organization',function(){
+            if ($('#organization').val() == 'Choose organization to edit') {
+                $('#orgsubmit').attr('disabled', true);
+            }
+            else {
+                $('#orgsubmit').attr('disabled', false);
+            }
+            });
+                      
+            
         })
     </script>
 {% endblock js_stuff %}

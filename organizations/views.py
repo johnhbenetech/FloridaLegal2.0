@@ -106,11 +106,12 @@ def validation(request, organization_id):
 
             if user.is_superuser:
                 #put here model names, which will be iterated for finding updates
-                models = ["OrganizationUpdate", "LocationUpdate", "ProgramUpdate", "ServiceUpdate", "EligibilityUpdate"]
+                models = ["OrganizationUpdate", "LocationUpdate", "ProgramUpdate", "ServiceUpdate", "EligibilityUpdate","ApplicationProcessUpdate"]
                 connection_fields_mapping = {"OrganizationUpdate": "organization_id", "LocationUpdate": "organization_id",
                                              "ProgramUpdate": "organization_id",
                                              "ServiceUpdate": "program__organization_id",
-                                             "EligibilityUpdate": "service__program__organization_id"
+                                             "EligibilityUpdate": "service__program__organization_id",
+                                             "ApplicationProcessUpdate": "service__program__organization_id"
                                              }
                 for model_name in models:
                     model_update_class = globals()[model_name]

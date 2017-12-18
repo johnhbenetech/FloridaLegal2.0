@@ -2,14 +2,23 @@
 {% load static %}
 {% load widget_tweaks %}
 
+{% block page_title %}API Token{% endblock page_title %}
+
+{% block header_stuff %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css">
+{% endblock header_stuff %}
+
 
 {% block content %}
-<h3>API Token Generated.</h3>
-<p>
-    Your Current API Token: {{ token.key }}
-</p>
-<br/>
 
+<div class="container">
+
+<div>
+<h3>API Token Generated.</h3>
+<br/>
+   <h4>Your Current API Token:</h2>
+   <code><pre><strong> {{ token.key }} </strong></code></pre>
+</div>
 
 <h3>Get Existing Records</h3>
 <div>
@@ -173,5 +182,7 @@ curl -X POST {% if request.is_secure %}https://{% else %}http://{% endif %}{{ re
 }' -H 'Content-Type: application/json'
             </pre>
     </code>
+</div>
+
 </div>
 {% endblock %}

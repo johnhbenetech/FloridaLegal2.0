@@ -20,13 +20,13 @@ class OrganizationUpdateForm(forms.ModelForm):
 class LocationForm(forms.ModelForm):
     class Meta:
         model = Location
-        exclude = ["organization",]
+        exclude = ["organization","latitude","longitude"]
 
 
 class LocationUpdateForm(forms.ModelForm):
     class Meta:
         model = Location
-        exclude = ["organization", "created_by", "is_processed", "is_marked_deleted"]
+        exclude = ["organization", "created_by", "is_processed", "is_marked_deleted","latitude","longitude"]
 
         widgets = {"location": forms.HiddenInput()}
 

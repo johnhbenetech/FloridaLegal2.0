@@ -65,6 +65,28 @@ class EligibilityUpdateAdmin(admin.ModelAdmin):
 admin.site.register(EligibilityUpdate, EligibilityUpdateAdmin)
 
 
+
+
+class ApplicationProcessAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ApplicationProcess._meta.fields]
+
+    class Meta:
+        model = ApplicationProcess
+
+admin.site.register(ApplicationProcess, ApplicationProcessAdmin)
+
+
+class ApplicationProcessUpdateAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ApplicationProcessUpdate._meta.fields]
+
+    class Meta:
+        model = ApplicationProcessUpdate
+
+admin.site.register(ApplicationProcessUpdate, ApplicationProcessUpdateAdmin)
+
+
+
+
 class TaxonomyAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Taxonomy._meta.fields]
 

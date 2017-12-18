@@ -16,22 +16,40 @@ class OrganizationViewSet(viewsets.ModelViewSet):
     http_method_names = ('get', "put", "post", "patch")
     is_update_model = False
 
+    
+    
     def get_queryset(self):
         user = self.request.user
         instance_id = self.kwargs.get("pk")
-        if instance_id:
-            print(instance_id)
-            obj = OrganizationUpdate.objects.filter(organization__owner=user, organization_id=instance_id, is_processed=False).last()
-            if obj:
-                qs = OrganizationUpdate.objects.filter(organization__owner=user)
-                self.is_update_model = True
-                self.kwargs["pk"] = obj.id
+        queryset = Organization.objects.all()
+#        queryset = Organization.objects.filter(owner=user, id=instance_id)
+        if instance_id is not None:
+            if user.is_superuser:
+                queryset = queryset.filter(id=instance_id)
             else:
-                qs = Organization.objects.filter(owner=user)
-        else:
-            qs = Organization.objects.filter(owner=user)
-        qs = Organization.objects.filter(owner=user)
-        return qs
+                queryset = queryset.filter(owner=user, id=instance_id)
+        return queryset    
+    
+    
+    
+    
+#    def get_queryset(self):
+#        user = self.request.user
+#        instance_id = self.kwargs.get("pk")
+#
+#        if instance_id:
+#            obj = Organization.objects.filter(owner=user, pk=instance_id)
+#            print(obj)
+#            if obj:
+#                qs = OrganizationUpdate.objects.filter(organization__owner=user)
+#                self.is_update_model = True
+#                self.kwargs["pk"] = obj.id
+#            else:
+#                qs = Organization.objects.filter(owner=user)
+#        else:
+#            qs = Organization.objects.filter(owner=user)
+#        qs = Organization.objects.filter(owner=user)
+#        return qs
 
     def get_serializer(self, args, **kwargs):
         """

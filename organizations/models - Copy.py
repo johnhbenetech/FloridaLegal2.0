@@ -81,7 +81,6 @@ class Location(models.Model):
     city = models.CharField(max_length=255, blank=True)
     state_province = models.CharField(max_length=2,choices=STATE_PROVINCE_CHOICES,null=True, blank=True)
     postal_code = models.CharField(max_length=255, blank=True)
-    opening_hours = models.TextField(blank=True)
 
 
 class LocationUpdate(models.Model):
@@ -100,7 +99,6 @@ class LocationUpdate(models.Model):
     created_by = models.ForeignKey(User, blank=True, null=True, default=None)
     is_processed = models.BooleanField(default=False)
     is_marked_deleted = models.BooleanField(default=False)
-    opening_hours = models.TextField(blank=True)
 
 
 PHONE_TYPE_CHOICES = (('fixed', 'Fixed'), ('cell', 'Cellular'),('fax','Fax'), ('hotline','Hotline'))
@@ -109,6 +107,7 @@ class Contact(models.Model):
     location = models.ForeignKey(Location, blank=True, null=True, default=None)
     contact_name = models.CharField(max_length=255, blank=True)
     contact_title = models.CharField(max_length=255, blank=True)
+    contact_department = models.CharField(max_length=255, blank=True)
     contact_email = models.EmailField(blank=True)
     phone_number = models.CharField(max_length=255, blank=True, validators=[
         RegexValidator(
@@ -127,6 +126,7 @@ class ContactUpdate(models.Model):
     contact = models.ForeignKey(Contact)
     contact_name = models.CharField(max_length=255, blank=True)
     contact_title = models.CharField(max_length=255, blank=True)
+    contact_department = models.CharField(max_length=255, blank=True)
     contact_email = models.EmailField(blank=True)
     phone_number = models.CharField(max_length=255, blank=True, validators=[
         RegexValidator(

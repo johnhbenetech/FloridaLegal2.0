@@ -15,6 +15,7 @@
   <!-- Tab panes -->
   <div class="tab-content">
     <h3>Related {{ page|capfirst }} Editing</h3>
+    <hr>
 
     {% if validation_mode %}
         {% if not pending_updates %}
@@ -35,24 +36,28 @@
                 <table>
                     <thead>
                         <tr>
-                            <th width="15%">Field name</th>
+                            <th width="10%">Field name</th>
                             <th width="20%">Initial value</th>
                             <th>Edited value</th>
                             <th width="25%">Related objects</th>
                         </tr>
                     </thead>
                     <tbody>
+
                          {% for formset_form in formset.forms %}
                             {% for field in formset_form %}
                                 <tr {% if field.name == "id" or field.name == "DELETE" or field.name == "service" or field.name == "program" or field.name == "program_update" %} class="hidden"{% endif %}>
-                                    <td>
+
+                                    <td style="border-left:solid 1px rgba(0, 0, 0, .2);padding:10px;">
                                         <p>
-                                            {{ field.name }}
+
+                                            <h5> <span class="label label-default">{{ field.name }} </span></h5>
                                         </p>
                                     </td>
-                                    <td>
+
+                                    <td align="center" style="border-left:solid 1px rgba(0, 0, 0, .2);padding:10px;">
                                         {% if not formset_form|get_linked_field_value:linked_field %}
-                                            <div class="label label-success">New!</div>
+                                            <h5> <span class="label label-success">New!</span></h5>
                                         {% else %}
                                             {% for id, data in initial_data.items %}
                                                 {% if id == formset_form|get_linked_field_value:linked_field %}
@@ -75,7 +80,8 @@
                                             {% endfor %}
                                         {% endif %}
                                     </td>
-                                    <td>
+
+                                    <td style="border-left:solid 1px rgba(0, 0, 0, .2);padding:10px;">
                                         <p>
                                             {{ field }}
                                         </p>
@@ -83,30 +89,64 @@
                                     <td></td>
                                 </tr>
                             {% endfor %}
-                             <tr>
+
+                                
+                                
+                        {% if related_objects %}
+                        {% for related_model, related_model_data in related_objects.items %}
+                                                     <tr>
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td>
-                                    {% if related_objects %}
-                                       {% for id, data in related_objects.items %}
-                                            {% if id == formset_form.id.value %}
-                                                <div class="text-right">
-                                                    <a href="{% url 'editing_related_objects' organization_id related_objects_name currently_edited_model formset_form.id.value %}{% if validation_mode %}validation_mode/{% endif %}" class="btn btn-success btn-xs">Edit</a>
-                                                </div>
-                                                <ul>
-                                                    {% for item in data %}
-                                                        <li>{% if item.name %}{{ item.name }}{% else %}{{ related_objects_name }}: id {{ item.id }}{% endif %}</li>
-                                                    {% endfor %}
-                                                </ul>
-                                            {% endif %}
-                                       {% endfor %}
-                                    {% endif %}
-                                </td>
-                             </tr>
-                             <tr class="tr-form-divider">
-                             </tr>
+
+
+                                <td style="border-left:solid 1px rgba(0, 0, 0, .2);padding:10px;">
+                            <div class="alert alert-success">
+                            <h5>Related {{ related_model|capfirst }}:</h5>
+                            
+                            <hr>
+                            
+                            {% if formset_form.id.value in related_model_data.objects_ids %}
+                               {% for id, data in related_model_data.data.items %}
+                                    {% if id == formset_form.id.value %}
+                                        
+
+                                            {% for item in data %}
+                                                <p>{% if item.name %}{{ item.name }}{% else %}{{ related_model }} Record: {{ item.id }}{% endif %} {% if item.is_marked_deleted %} <strong>(deleted)</strong> {% endif %}</p>
+                                            {% endfor %}
+
+                                        <div class="text-right">
+                                        </br>
+                                        <a href="{% url 'editing_related_objects' organization_id related_model_data.plural_name currently_edited_model formset_form.id.value %}{% if validation_mode %}validation_mode/{% endif %}" class="btn btn-success btn-sm">Edit</a>
+                                        </div>
+                                    {% endif %} 
+                                    
+                               {% endfor %}
+  
+                            {% endif %}
+
+
+
+                    </div>
+                    </td>
                         {% endfor %}
+                        
+                            </tr>
+    
+                            <tr class="tr-form-divider">
+    
+                            </tr>  
+                    {% endif %}
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+
+                {% endfor %}
+ 
                         {% for data in deleted_objects_list %}
                             {% for field, val in data.items %}
                                 <tr>
@@ -126,62 +166,98 @@
                         {% endfor %}
                     </tbody>
                 </table>
-            </div>
+            </div>        
         {% endif %}
 
     {% else %}
-        <button type="button" class="btn btn-success" id="add_more_button">Add more</button>
+        <button type="button" class="btn btn-success" id="add_more_button">Add Another</button>
         {{ formset.management_form }}
+
         <div id="object_empty_form" style="display:none">
+        <div class="objrow">
             <div class='no_error visible formset-form-container'>
+            
                 {{ formset.empty_form }}
+    
                 <div class="form-group">
                     <a class="btn btn-danger btn-delete">Delete</a>
                 </div>
+                <hr>
             </div>
+        </div>    
         </div>
+        
         <div id="object_formset_container">
             {% for formset_form in formset.forms %}
+
+
                 <div class="row">
+                <div class="objrow">
+                    
+                {% if related_objects %} 
                     <div class="col-lg-6">
-                      <div class='no_error visible formset-form-container'>
+                {% else %}
+                    <div class="col-lg-6 col-lg-offset-3">
+                {% endif %}   
+                        <div class='no_error visible formset-form-container'>
                             {{ formset_form }}
                             <div class="form-group">
                                 <a class="btn btn-danger btn-delete">Delete</a>
                             </div>
+                            
                       </div>
                     </div>
-                    <div class="col-lg-6">
-                        {% if formset_form.id.value in related_objects_ids %}
-                           {% for id, data in related_objects.items %}
-                                {% if id == formset_form.id.value %}
-                                    <p class="lead">Related {{ related_objects_name|capfirst }}:
-                                        <a href="{% url 'editing_related_objects' organization_id related_objects_name currently_edited_model formset_form.id.value %}{% if validation_mode %}validation_mode/{% endif %}" class="btn btn-success btn-xs">Edit</a>
-                                    </p>
-                                    <ul>
-                                        {% for item in data %}
-                                            <li>{% if item.name %}{{ item.name }}{% else %}{{ related_objects_name }}: id {{ item.id }}{% endif %}</li>
-                                        {% endfor %}
-                                    </ul>
-                                {% endif %}
-                           {% endfor %}
-                        {% elif related_objects_name %}
-                            <p class="lead">Related {{ related_objects_name|capfirst }}:
-                                <a href="{% url 'editing_related_objects' organization_id related_objects_name currently_edited_model formset_form.id.value %}{% if validation_mode %}validation_mode/{% endif %}" class="btn btn-success btn-xs">Add</a>
-                            </p>
-                        {% endif %}
+                    {% if related_objects %} 
+                    <div class="col-lg-5 col-lg-offset-1">
+                    
+                        {% for related_model, related_model_data in related_objects.items %}
+                            <div class="alert alert-success">
+                            <h4>Related {{ related_model|capfirst }}:</h4>
+                            
+                            <hr>
+                            
+                            {% if formset_form.id.value in related_model_data.objects_ids %}
+                               {% for id, data in related_model_data.data.items %}
+                                    {% if id == formset_form.id.value %}
+                                        
+                                        <ul>
+                                            {% for item in data %}
+                                                <li>{% if item.name %}{{ item.name }}{% else %}{{ related_model }} Record: {{ item.id }}{% endif %} {% if item.is_marked_deleted %} <strong>(deleted)</strong> {% endif %}</li>
+                                            {% endfor %}
+                                        </ul>
+                                        <div class="text-right">
+                                        <a href="{% url 'editing_related_objects' organization_id related_model_data.plural_name currently_edited_model formset_form.id.value %}{% if validation_mode %}validation_mode/{% endif %}" class="btn btn-success btn-sm">Add / Edit</a>
+                                        </div>
+                                    {% endif %} 
+                                    
+                               {% endfor %}
+                                   
+                            {% else %}
+                                <div class="text-right">
+                                    <a href="{% url 'editing_related_objects' organization_id related_model_data.plural_name currently_edited_model formset_form.id.value %}{% if validation_mode %}validation_mode/{% endif %}" class="btn btn-success btn-sm">Add</a>
+                                </div>
+                            {% endif %}
+                            </div>
+                        {% endfor %}
                     </div>
+                    {% endif %}
                 </div>
+                </div>
+                
+                <div class="col-lg-12"><hr></div>
+                
+
             {% endfor %}
         </div>
-                                <div class="form-group">              
-                            <button class="btn btn-primary" type="submit">Save</button>
-                            {% if previous_url %}
-                                {% if previous_url %}<a href="{{ previous_url }}" class="btn btn-default">Back</a>{% endif %}
-                            {% endif %}
-                        </div> 
-    {% endif %}
 
+    {% endif %}
+                        <div class="form-group">
+                            {% if previous_url %}
+                                {% if previous_url %}<a href="{{ previous_url }}" class="btn btn-default btn-lg">Back</a>{% endif %}
+                            {% endif %}
+                            <button class="btn btn-primary btn-lg" type="submit">Save</button>
+                            
+                        </div> 
   </div>
 
 {% endblock %}
@@ -199,7 +275,8 @@
 
             $(document).on('click', '.btn-delete', function() {
                 $(this).closest('.formset-form-container').find($('input[name*="DELETE"]')).prop("checked", true);
-                $(this).closest('.formset-form-container').css("display", "none").removeClass('visible');
+                $(this).closest('.objrow').css("display", "none").removeClass('visible');
+//                $(this).closest('.formset-form-container').css("display", "none").removeClass('visible');
                 $(this).remove();
             });
 
