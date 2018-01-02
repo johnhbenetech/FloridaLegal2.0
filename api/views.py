@@ -16,8 +16,8 @@ class OrganizationViewSet(viewsets.ModelViewSet):
     http_method_names = ('get', "put", "post", "patch")
     is_update_model = False
 
-    
-    
+
+
     def get_queryset(self):
         user = self.request.user
         instance_id = self.kwargs.get("pk")
@@ -28,11 +28,11 @@ class OrganizationViewSet(viewsets.ModelViewSet):
                 queryset = queryset.filter(id=instance_id)
             else:
                 queryset = queryset.filter(owner=user, id=instance_id)
-        return queryset    
-    
-    
-    
-    
+        return queryset
+
+
+
+
 #    def get_queryset(self):
 #        user = self.request.user
 #        instance_id = self.kwargs.get("pk")

@@ -14,175 +14,164 @@
 <div class="container">
 
 <div>
-<h3>API Token Generated.</h3>
-<br/>
+<h3>User/Token API</h3>
+</br>
    <h4>Your Current API Token:</h2>
-   <code><pre><strong> {{ token.key }} </strong></code></pre>
-</div>
+   <pre><code><strong> {{ token.key }} </strong></code></pre>
+</br>
 
-<h3>Get Existing Records</h3>
-<div>
-    <h4>Get Services List</h4>
-    <code>
-        curl -X GET {% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/v1/services/ -H 'Authorization: Token {{ token.key }}' -H 'Accept:
-        application/json; indent=4'
+
+    <h4>Get User Token</h4>
+
+    <strong>Endpoint: </strong><code>
+    {% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/accounts/auth/
+    </code></br>
+    <strong>Method:</strong> POST</br>
+    <strong>Body (Form):</strong>
+    <pre><code>'username=USERNAME, password=PASSWORD'</code></pre>
     </code>
-</div>
 
-<div>
-    <h4>Get Service With ID = 1</h4>
-    <code>
-        curl -X GET {% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/v1/services/1/ -H 'Authorization: Token {{ token.key }}' -H 'Accept:
-        application/json; indent=4'
+</br>
+
+<h3>Organization API</h3>
+
+
+</br>
+
+
+    <h4>Create Organization</h4>
+
+<p></p>For now I made an intentional design decision to prohibit the creation of NEW organizations over the API. The reasoning behind it being that we would need to set up user accounts and assign ownership roles to specific records during pilots. It’s more of a control thing for now. I can enable this endpoint for future tests if we feel like it’s important.
+</p>
+</br>
+
+<h4>List All Organizations</h4>
+
+<p>This will return a JSON of all verified organization information. Any outstanding (unverified) updates will not be returned to this endpoint until they have been approved.</p>
+
+    <strong>Endpoint: </strong><code>
+    {% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/v1/organizations/
+    </code></br>
+    <strong>Method:</strong> GET</br>
+    <strong>Header:</strong>
+    <pre><code>'Authorization: Token {{ token.key }}'</code></pre>
+
+
+</br>
+
+<h4>Update Organization</h4>
+
+<p>This endpoint will allow a ‘superuser’ or a record’s ‘owner’ account to push updates to an existing organization record. The pushed information will sit in a verification queue, and after a manual review, the updates can be pushed live (and will be made available in the list all endpoint).</p>
+
+    <strong>Endpoint: </strong><code>
+    {% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/v1/organizations/{id}
     </code>
-</div>
+    </br>
+    <strong>Method:</strong> PATCH</br>
+    <strong>Header</strong> (must be owner or superuser):
+    <pre><code>'Authorization: Token {{ token.key }}'</code></pre>
+
+</br>
+    <strong>Body Examples (JSON):</strong>
+
+</br>
+    <h5>Simple name update</h5>
+    <pre>
+<code>{
+    "name": "John's Org New"
+}
+</code></pre>
 
 
-<div>
-    <h4>Get Organizations List</h4>
-    <code>
-        curl -X GET {% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/v1/organizations/ -H 'Authorization: Token {{ token.key }}' -H 'Accept:
-        application/json; indent=4'
-    </code>
-</div>
+</br>
+    <h5>Simple update of all base fields</h5>
+    <pre>
+<code>{
+    "name": "John's Org New 2",
+    "description": "Update!",
+    "url": "www.newwebsite.com",
+    "email": “newemail@website.com”
+}
 
-<div>
-    <h4>Get Organization With ID = 1</h4>
-    <code>
-        curl -X GET {% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/v1/organizations/1/ -H 'Authorization: Token {{ token.key }}' -H 'Accept:
-        application/json; indent=4'
-    </code>
-</div>
+</code></pre>
 
-<div>
-    <h4>Get Services by Organization ID</h4>
-    <code>
-        curl -X GET {% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/v1/services/?organizationid=1 -H 'Authorization: Token {{ token.key }}' -H 'Accept:
-        application/json; indent=4'
-    </code>
-</div>
 
-<br/>
-<br/>
+</br>
+    <h5>Update name and add new location</h5>
+    <pre>
+<code>{
+"name": "John's Org New 3",
+"locations": [
+	{
+		"name": "Location 1",
+		"description": "Example Location 1",
+		"transportation": "Take Bus #1",
+		"latitude": "123.123",
+		"longitude": "123.123",
+		"address_1": "123 Fake Street",
+		"address_2": "Unit 101",
+		"city": "San Francisco",
+		"state_province": "CA",
+		"postal_code": "94108",
+		"opening_hours": "9am-5pm M-F"
+	}
+]
+}
+</code></pre>
 
-<div>
-    <h3>Create Service Update (must provide token of record owner)</h3>
-    <code>
-            <pre>
-curl -X POST {% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/api/v1/service_updates/ -H 'Authorization: Token {{ token.key }}' -H 'Accept: application/json; indent=4' -d ' 
- {
-    "service": 1,
-    "name": "Test Service",
-    "alternate_name": "",
-    "description": "",
-    "url": "",
-    "email": "",
-    "status": "",
-    "interpretation_services": [
-        1
-    ],
-    "application_process": "",
-    "wait_time": "",
-    "fees": "",
-    "accredidations": "",
-    "licenses": "",
-    "taxonomy_ids": [],
-    "validation_note": "TESTING 123",
-    "eligibilities_updates": [
-        {
-            "eligibility_record": 1,
-            "eligibility_details": "wqe"
-        }
-    ],
-    "payments_updates": [
-        {
-            "payment_record": 1,
-            "payment": "qwe"
-        }
-    ],
-    "documents_updates": [
-        {
-            "required_document_record": 1,
-            "document": "qwe"
-        }
-    ],
-    "serviceareas_updates": [
-        {
-            "area_record": 1,
-            "area": [
-                1
-            ],
-            "description": "qwe"
-        }
-    ],
-    "regular_schedule_updates": [
-        {
-            "regular_schedule_record": 1,
-            "weekday": 2,
-            "from_hour": "21:40:00",
-            "to_hour": "21:30:00",
-            "closed": false
-        }
-    ],
-    "holiday_schedule_updates": [
-        {
-            "holiday_schedule_record": 1,
-            "day": "2017-09-20",
-            "from_hour": null,
-            "to_hour": null,
-            "closed": true
-        }
-    ],
-    "locations_updates": [
-        {
-            "location_record": 1,
-            "name": "qwe",
-            "alternate_name": "qqweqw",
-            "description": "qweqw",
-            "transportation": "",
-            "latitude": "",
-            "longitude": "",
-            "contact_updates": [
-                {
-                    "contact_record": 1,
-                    "name": "qwe",
-                    "title": "",
-                    "department": "",
-                    "email": "",
-                    "phone_updates": [
-                        {
-                            "phone_record": 1,
-                            "number": "(222)222-2222",
-                            "extension": "",
-                            "type": "",
-                            "department": "",
-                            "languages": [],
-                            "description": ""
-                        }
-                    ]
-                }
-            ],
-            "physical_address_updates": [
-                {
-                    "physical_address_record": 1,
-                    "attention": "qwe",
-                    "address_1": "",
-                    "address_2": "",
-                    "address_3": "",
-                    "address_4": "",
-                    "city": "1111",
-                    "region": "",
-                    "state_province": null,
-                    "postal_code": "",
-                    "country": ""
-                }
-            ]
-        }
-    ]
-}' -H 'Content-Type: application/json'
-            </pre>
-    </code>
-</div>
+
+</br>
+    <h5>Complex update including nested program, services, application process, and eligibility</h5>
+    <pre>
+<code>{
+"name": "John's Org New 4",
+"programs": [
+	{
+		"name": "Program 1",
+		"status": "Active",
+		"description": "Example description",
+		"taxonomy_ids": [1],
+		"services": [
+			{
+				"name": "Example Service",
+				"description": "service description",
+				"email": "email@email.com",
+				"status": "active",
+				"application_process": "none",
+				"interpretation_services": [43,45],
+				"taxonomy_ids": [1],
+				"eligibility": [
+					{
+						"eligibility_details": "Must been elderly and 50% PL",
+						"minimum_age": "65",
+						"maximum_age": "test",
+						"veteran_status": "None",
+						"maximum_income": "50% FPL",
+						"taxonomy_detail": "test",
+						"area_description": "test",
+						"required_document": "test",
+						"immigration_status": "test",
+						"criminal_status": "test",
+						"taxonomy": [2],
+						"area": [3,4]
+					}
+				],
+				"applicationprocess": [
+					{
+						"howto": "Application how to details example",
+						"intakehours": "9-5pm",
+						"waittime": "Usually an hour"
+					}
+				]
+			}
+		]
+	}
+]
+}
+</code></pre>
+
+
+
 
 </div>
 {% endblock %}
