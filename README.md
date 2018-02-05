@@ -111,20 +111,20 @@ http://127.0.0.1:8000/admin/
 * Admins may review unprocessed updates here in a side by side comparison and accept the changes to live or reject them using the 'Validation' tab.
 
 
-#API Docs
+# API Docs
 
-##Get User Token
+## Get User Token
 Endpoint: 127.0.0.1:8000/accounts/auth/ 
 Method: POST
 Body (Form):
 'username=USERNAME, password=PASSWORD'
 
-##Organization API
+## Organization API
 
-###Create Organization
+### Create Organization
 For now I made an intentional design decision to prohibit the creation of NEW organizations over the API. The reasoning behind it being that we would need to set up user accounts and assign ownership roles to specific records during pilots. It’s more of a control thing for now. I can enable this endpoint for future tests if we feel like it’s important.
 
-###List All Organizations
+### List All Organizations
 This will return a JSON of all verified organization information. Any outstanding (unverified) updates will not be returned to this endpoint until they have been approved.
 
 Endpoint: 127.0.0.1:8000/api/v1/organizations/ 
@@ -132,7 +132,7 @@ Method: GET
 Header:
 'Authorization: Token TOKEN_GOES_HERE'
 
-###Update Organization
+### Update Organization
 This endpoint will allow a ‘superuser’ or a record’s ‘owner’ account to push updates to an existing organization record. The pushed information will sit in a verification queue, and after a manual review, the updates can be pushed live (and will be made available in the list all endpoint).
 
 Endpoint: 127.0.0.1:8000/api/v1/organizations/{id} 
@@ -140,16 +140,16 @@ Method: PATCH
 Header (must be owner or superuser):
 'Authorization: Token TOKEN_GOES_HERE'
 
-##Body Examples (JSON): 
+## Body Examples (JSON): 
 
-###Simple name update
+### Simple name update
 ```
 {
     "name": "John's Org New"
 }
 ```
 
-###Simple update of all base fields
+### Simple update of all base fields
 ```
 {
     "name": "John's Org New 2",
@@ -160,7 +160,7 @@ Header (must be owner or superuser):
 ```
 
 
-###Update name and add new location
+### Update name and add new location
 ```
 {
 "name": "John's Org New 3",
@@ -182,7 +182,7 @@ Header (must be owner or superuser):
 }
 ```
 
-###Complex update including nested program, services, application process, and eligibility
+### Complex update including nested program, services, application process, and eligibility
 ```
 {
 "name": "John's Org New 4",
