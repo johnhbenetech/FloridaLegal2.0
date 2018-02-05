@@ -109,3 +109,124 @@ http://127.0.0.1:8000/admin/
 ### ADMIN: All updates
 * This page contains all updates submitted by users.
 * Admins may review unprocessed updates here in a side by side comparison and accept the changes to live or reject them using the 'Validation' tab.
+
+
+#API Docs
+
+##Get User Token
+Endpoint: 127.0.0.1:8000/accounts/auth/ 
+Method: POST
+Body (Form):
+'username=USERNAME, password=PASSWORD'
+
+##Organization API
+
+###Create Organization
+For now I made an intentional design decision to prohibit the creation of NEW organizations over the API. The reasoning behind it being that we would need to set up user accounts and assign ownership roles to specific records during pilots. It’s more of a control thing for now. I can enable this endpoint for future tests if we feel like it’s important.
+
+###List All Organizations
+This will return a JSON of all verified organization information. Any outstanding (unverified) updates will not be returned to this endpoint until they have been approved.
+
+Endpoint: 127.0.0.1:8000/api/v1/organizations/ 
+Method: GET
+Header:
+'Authorization: Token TOKEN_GOES_HERE'
+
+###Update Organization
+This endpoint will allow a ‘superuser’ or a record’s ‘owner’ account to push updates to an existing organization record. The pushed information will sit in a verification queue, and after a manual review, the updates can be pushed live (and will be made available in the list all endpoint).
+
+Endpoint: 127.0.0.1:8000/api/v1/organizations/{id} 
+Method: PATCH
+Header (must be owner or superuser):
+'Authorization: Token TOKEN_GOES_HERE'
+
+##Body Examples (JSON): 
+
+###Simple name update
+```
+{
+    "name": "John's Org New"
+}
+```
+
+###Simple update of all base fields
+```
+{
+    "name": "John's Org New 2",
+    "description": "Update!",
+    "url": "www.newwebsite.com",
+    "email": “newemail@website.com”
+}
+```
+
+
+###Update name and add new location
+```
+{
+"name": "John's Org New 3",
+"locations": [
+	{
+		"name": "Location 1",
+		"description": "Example Location 1",
+		"transportation": "Take Bus #1",
+		"latitude": "123.123",
+		"longitude": "123.123",
+		"address_1": "123 Fake Street",
+		"address_2": "Unit 101",
+		"city": "San Francisco",
+		"state_province": "CA",
+		"postal_code": "94108",
+		"opening_hours": "9am-5pm M-F"
+	}
+]
+}
+```
+
+###Complex update including nested program, services, application process, and eligibility
+```
+{
+"name": "John's Org New 4",
+"programs": [
+	{
+		"name": "Program 1",
+		"status": "Active",
+		"description": "Example description",
+		"taxonomy_ids": [1],
+		"services": [
+			{
+				"name": "Example Service",
+				"description": "service description",
+				"email": "email@email.com",
+				"status": "active",
+				"application_process": "none",
+				"interpretation_services": [43,45],
+				"taxonomy_ids": [1],
+				"eligibility": [
+					{
+						"eligibility_details": "Must been elderly and 50% PL",
+						"minimum_age": "65",
+						"maximum_age": "test",
+						"veteran_status": "None",
+						"maximum_income": "50% FPL",
+						"taxonomy_detail": "test",
+						"area_description": "test",
+						"required_document": "test",
+						"immigration_status": "test",
+						"criminal_status": "test",
+						"taxonomy": [2],
+						"area": [3,4]
+					}
+				],
+				"applicationprocess": [
+					{
+						"howto": "Application how to details example",
+						"intakehours": "9-5pm",
+						"waittime": "Usually an hour"
+					}
+				]
+			}
+		]
+	}
+]
+}
+```
